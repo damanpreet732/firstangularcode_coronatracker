@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <title>Document</title>
+</head>
+<body >
+    <div id="container">
+        <h1 >World Corona Tracker </h1>
+        <div ng-app="myApp" ng-controller="myCtrl" >
+            <h2><b>Search Country :</h2></span> <input id="country" ng-model="f" > <br>
+            <div id="div1">
+                <table > 
+                    <tr>
+                        <th ng-click="orderByMe('Country')">Countries ⏬</th>
+                        <th ng-click="orderByMe('NewConfirmed')">NewConfirmed ⏬</th>
+                        <th ng-click="orderByMe('TotalConfirmed')">TotalConfirmed ⏬</th>
+                        <th ng-click="orderByMe('NewDeaths')">NewDeaths ⏬</th>
+                        <th ng-click="orderByMe('TotalDeaths')">TotalDeaths ⏬</th>
+                        <th ng-click="orderByMe('NewRecovered')">NewRecovered ⏬</th>
+                        <th ng-click="orderByMe('TotalRecovered')">TotalRecovered ⏬</th>
+                    </tr>
+                    <tr>
+                        <td>Global</td>
+                        <td>{{global.NewConfirmed}}</td>
+                        <td>{{global.TotalConfirmed}}</td>
+                        <td>{{global.NewDeaths}}</td>
+                        <td>{{global.TotalDeaths}}</td>
+                        <td>{{global.NewRecovered}}</td>
+                        <td>{{global.TotalRecovered}}</td>
+                    </tr>
+                    <tr ng-repeat="x in country | filter : f | orderBy:myOrderBy:true ">
+                        <td >{{x.Country}} </td>
+                        <td>{{x.NewConfirmed}}</td>
+                        <td>{{x.TotalConfirmed}}</td>
+                        <td>{{x.NewDeaths}}</td>
+                        <td>{{x.TotalDeaths}}</td>
+                        <td>{{x.NewRecovered}}</td>
+                        <td>{{x.TotalRecovered}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var app = angular.module("myApp",[])
+            app.controller("myCtrl",function($scope,$http){
+                $http.get("https://api.covid19api.com/summary")
+                .then(function(response){
+                    $scope.global = response.data.Global 
+                    $scope.country = response.data.Countries 
+                    $scope.orderByMe = function(x) {
+                    $scope.myOrderBy = x;
+                    }
+                })
+                
+            })
+    </script>
+    <style>
+        body{
+        }
+        h1{
+            font-family: "Comic Sans MS";
+            font-size: 50pt;
+            color:  maroon ;
+            width: 70% ;
+            margin-left: 15% ;
+            margin-right: 15%;
+            text-align: center;
+
+        }
+        .divList{
+            height: 30px ;
+            width: 90px ;
+            background-color: aqua;
+            border : 2px  black solid;
+            margin : 1px ;
+            text-align: center;
+        }
+        input{
+            padding : 5px ;
+            border: 1px solid grey;
+            border-radius: 5px ;
+            background-color: aquamarine;
+            width: 70% ;
+            margin-left: 15% ;
+            margin-right: 15%;
+        }
+        h2{
+            font-family: "Comic Sans MS";
+            width: 70% ;
+            margin-left: 15% ;
+            margin-right: 15%;
+        }
+        table{
+            margin-top : 25px ;
+            width: 70% ;
+            margin-left: 15% ;
+            margin-right: 15%;
+        }
+        td,th,tr {
+            border : solid black ;
+            border-radius: 5px ;
+            padding : 2px;
+            text-align: center;
+        }
+        tr:nth-child(even){
+            background-color: grey;
+            color : white;
+        }
+        button{
+            border-radius: 5px ;
+        }
+    </style>
+</body>
+</html>
